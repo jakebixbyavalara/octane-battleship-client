@@ -3,6 +3,7 @@ export function buildBoard(size = 10) {
     return [...Array(size)].map(() => 0);
   });
 }
+// build out a board using an array of ship arguments for placeShip
 export function populateBoard(board, map) {
   // console.log(map);
   let ships = map || [
@@ -15,30 +16,59 @@ export function populateBoard(board, map) {
   ];
   return ships.reduce((acc, values) => placeShip(acc, ...values), board);
 }
-export function placeShip(board, size, coords, orientation = 1) {
+// gets orientation offset for x and y axis
+export function getOrientation(dir) {
+  return {
+    x: dir ? 1 : 0,
+    y: dir ? 0 : 1
+  };
+}
+
+// compute x and y position using coords and offset
+// used for placing ships
+export function getPosition(coords = { x: 0, y: 0 }, dir = { x: 1, y: 0 }, offset = 0) {
+  return {
+    x: coords.x - dir.x + offset * dir.x,
+    y: coords.y - dir.y + offset * dir.y
+  };
+}
+
+// do validation check before actually assigning any ship positions
+export function canPlaceShip(board, shipSize, coords, orientation) {
   // orientation determines direction to move from start coord
-  let yDir = orientation ? 0 : 1;
-  let xDir = orientation ? 1 : 0;
+  let dir = getOrientation(orientation);
   try {
-    for (let i = 1; i <= size; i++) {
-      let row = coords.y - yDir + i * yDir;
-      let col = coords.x - xDir + i * xDir;
-      if (board[row][col])
+    for (let i = 1; i <= shipSize; i++) {
+      let pos = getPosition(coords, dir, i);
+      if (board[pos.y][pos.x])
         throw new Error(
-          `Cannot place a ${orientation ? 'horizontal' : 'vertical'} ${size} square ship at ${
+          `Cannot place a ${orientation ? 'horizontal' : 'vertical'} ${shipSize} square ship at ${
             coords.x
-          }, ${coords.y}, as ${row}, ${col} is an occupied space.`
+          }, ${coords.y}, as ${pos.y}, ${pos.x} is an occupied space.`
         );
-      if (typeof board[row][col] === 'undefined')
+      if (typeof board[pos.y][pos.x] === 'undefined')
         throw new Error(
           `Cannot place ship at ${coords.x}, ${coords.y}, because it does not fit the constraints of the map.`
         );
-      // set to 1 to represent ship
-      board[row][col] = 1;
     }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);
+    return false;
+  }
+  return true;
+}
+
+// place a ship on a board
+// will throw if the position is occupied or out of bounds
+export function placeShip(board, shipSize, coords, orientation = 1) {
+  // orientation determines direction to move from start coord
+  if (canPlaceShip(board, shipSize, coords, orientation)) {
+    let dir = getOrientation(orientation);
+    for (let i = 1; i <= shipSize; i++) {
+      let pos = getPosition(coords, dir, i);
+      board[pos.y][pos.x] = 1;
+    }
   }
   return board;
 }
@@ -46,5 +76,8 @@ export function placeShip(board, size, coords, orientation = 1) {
 export default {
   buildBoard,
   populateBoard,
-  placeShip
+  placeShip,
+  canPlaceShip,
+  getOrientation,
+  getPosition
 };
