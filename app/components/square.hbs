@@ -1,0 +1,10 @@
+<td
+{{on "click" (fn @fire @row @col)}}
+  role="button"
+  class="outline-blue-sm w-8 h-8 {{this.background}} text-center text-xl font-black select-none"
+>
+  {{#if this.isFired}}
+    X
+  {{/if}}
+  {{yield}}
+</td>

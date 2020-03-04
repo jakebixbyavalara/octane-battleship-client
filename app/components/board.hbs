@@ -12,8 +12,7 @@
       <tr>
         <th class="text-center select-none p-1">{{get this.cols r}}</th>
         {{#each this.cols as |col c|}}
-          <td class="outline-blue-sm w-8 h-8 {{if (and (eq c 1) (eq r 4)) "bg-red-600" "bg-white"}}">
-          </td>
+          <Square @fire={{this.player.fire}} @col={{c}} @row={{r}} @ships={{this.player.board.ships}} @shots={{this.player.board.shots}} @showShips={{@showShips}}/>
         {{/each}}
       </tr>
     {{/each}}

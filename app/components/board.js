@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 
 export default class BoardComponent extends Component {
+  @service('game') game;
   DEFAULT_SIZE = 10;
 
   get size() {
@@ -9,7 +11,9 @@ export default class BoardComponent extends Component {
   getLetterByIndex(index) {
     return String.fromCharCode(65 + index); // charCode 65 = 'A'
   }
-
+  get player() {
+    return this.game.players[this.args.player];
+  }
   get rows() {
     return [...Array(this.size)].map((_, index) => this.getLetterByIndex(index));
   }
