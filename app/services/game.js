@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 // import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import Player from 'octane-battleship-client/classes/player';
+import Player from 'octane-battleship-client/delegates/player';
 
 export default class GameService extends Service {
   constructor() {
