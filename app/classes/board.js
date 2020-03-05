@@ -5,7 +5,7 @@ import { action } from '@ember/object';
 /**
  * This class manages board state,
  * specifically the location of ships, and where shots have been made
- * It does not manage
+ * It provides a fire action to mutate its state
  */
 export default class Board {
   constructor(options = {}) {
@@ -16,16 +16,20 @@ export default class Board {
   @tracked shots = [];
   @tracked ships = [];
 
+  /**
+   * Updates shot board at specified coordinates
+   * @param {Number} row
+   * @param {Number} col
+   */
   @action
   fire(row, col) {
     let ship = this.ships[row][col];
     let shot = this.shots[row][col];
     // return if we've already fired here
     if (shot) return;
-    // sets to 2 for hit, 1 for miss
+    // sets to 3 for hit, 2 for miss
     this.shots[row][col] = ship + 2;
     // re assign to trigger tracking change
     this.shots = [...this.shots];
-    // console.log(ship, shot, ship % 3, this.shots);
   }
 }

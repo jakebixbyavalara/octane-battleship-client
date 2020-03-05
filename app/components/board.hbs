@@ -12,7 +12,7 @@
       <tr>
         <th class="text-center select-none p-1">{{get this.cols r}}</th>
         {{#each this.cols as |col c|}}
-          <Square @fire={{this.player.fire}} @col={{c}} @row={{r}} @ships={{this.player.board.ships}} @shots={{this.player.board.shots}} @showShips={{@showShips}}/>
+          <Square @fire={{this.player.board.fire}} @col={{c}} @row={{r}} @ships={{this.player.board.ships}} @shots={{this.player.board.shots}} @showShips={{@showShips}}/>
         {{/each}}
       </tr>
     {{/each}}
