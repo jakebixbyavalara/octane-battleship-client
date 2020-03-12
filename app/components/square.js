@@ -1,6 +1,8 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 
 export default class SquareComponent extends Component {
+  @service('game') game;
   displayStates = ['bg-blue-300', 'bg-gray-400', 'bg-white', 'bg-red-500'];
 
   get showShips() {

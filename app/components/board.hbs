@@ -12,9 +12,21 @@
       <tr>
         <th class="text-center select-none p-1">{{get this.cols r}}</th>
         {{#each this.cols as |col c|}}
-          <Square @fire={{this.player.board.fire}} @col={{c}} @row={{r}} @ships={{this.player.board.ships}} @shots={{this.player.board.shots}} @showShips={{@showShips}}/>
+          <Square @place={{this.placeShip}} @fire={{this.player.board.fire}} @col={{c}} @row={{r}} @ships={{this.player.board.ships}} @shots={{this.player.board.shots}} @showShips={{@showShips}} @selectedShip={{this.selectedShip}} />
         {{/each}}
       </tr>
     {{/each}}
   </tbody>
 </table>
+{{#if (and this.shipList (not this.allPlaced))}}
+  <ul>
+    {{#each this.shipList as |ship|}}
+      <li>
+        <button {{on "click" (fn this.selectShip ship)}} {{on "dblclick" (fn this.toggleShipOrientation ship)}} type="button" class="bg-blue-200 p-2 m-1 border-solid border {{if ship.isPlaced "border-red-400" "border-blue-500"}}">
+          {{ship.name}} - {{if ship.horizontal "h" "v"}}
+        </button>
+      </li>
+    {{/each}}
+    <li>{{this.allPlaced}}</li>
+  </ul>
+{{/if}}

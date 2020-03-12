@@ -1,4 +1,10 @@
 <div class="flex flex-wrap justify-center mt-4">
-  <Board @player={{0}} />
-  <Board @player={{1}} @showShips={{false}} />
+  {{this.game.state.value}}
+  {{#if (eq this.game.state.value "started")}}
+    <Board @player={{this.game.player}} />
+    <Board @player={{this.game.opponent}} @showShips={{false}} />
+  {{/if}}
+  {{#if (eq this.game.state.value "setup")}}
+    <Board @player={{this.game.player}} />
+  {{/if}}
 </div>

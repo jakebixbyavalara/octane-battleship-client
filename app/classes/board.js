@@ -1,4 +1,4 @@
-import { buildBoard, populateBoard } from 'octane-battleship-client/utils/board';
+import { buildBoard, placeShip } from 'octane-battleship-client/utils/board';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
@@ -8,14 +8,17 @@ import { action } from '@ember/object';
  * It provides a fire action to mutate its state
  */
 export default class Board {
-  constructor(options = {}) {
-    // console.log(options);
-    this.ships = populateBoard(buildBoard(), options.shipMap);
+  constructor() {
+    this.ships = buildBoard();
     this.shots = buildBoard();
   }
   @tracked shots = [];
   @tracked ships = [];
 
+  get hasWon() {
+    const count = this.shots.flat().reduce((total, shot) => (shot > 2 ? total++ : total), 0);
+    return count === 17;
+  }
   /**
    * Updates shot board at specified coordinates
    * @param {Number} row
@@ -31,5 +34,15 @@ export default class Board {
     this.shots[row][col] = ship + 2;
     // re assign to trigger tracking change
     this.shots = [...this.shots];
+  }
+  @action
+  placeShip(ship, row, col) {
+    if (ship.isPlaced) return;
+    // otherwise place the ship
+    const ships = placeShip(this.ships, ship.size, { x: col, y: row }, ship.horizontal);
+    if (ships) {
+      this.ships = [...ships];
+    }
+    return ships;
   }
 }

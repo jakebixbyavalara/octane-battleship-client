@@ -1,5 +1,5 @@
 <td
-{{on "click" (fn @fire @row @col)}}
+  {{on "click" (if this.game.isSetup (fn @fire @row @col) (fn @place @selectedShip @row @col))}}
   role="button"
   class="outline-blue-sm w-8 h-8 {{this.background}} text-center text-xl font-black select-none"
 >

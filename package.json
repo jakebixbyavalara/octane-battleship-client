@@ -54,7 +54,8 @@
     "loader.js": "^4.7.0",
     "prettier": "^1.19.1",
     "qunit-dom": "^1.0.0",
-    "tailwindcss": "^1.2.0"
+    "tailwindcss": "^1.2.0",
+    "xstate": "^4.8.0"
   },
   "engines": {
     "node": "10.* || >= 12"

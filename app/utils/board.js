@@ -18,6 +18,10 @@ export function populateBoard(board, map) {
 }
 // gets orientation offset for x and y axis
 export function getOrientation(dir) {
+  // if we're passing in a string (h or v) convert to bool
+  if (typeof dir === 'string') {
+    dir = dir === 'h';
+  }
   return {
     x: dir ? 1 : 0,
     y: dir ? 0 : 1
@@ -34,15 +38,15 @@ export function getPosition(coords = { x: 0, y: 0 }, dir = { x: 1, y: 0 }, offse
 }
 
 // do validation check before actually assigning any ship positions
-export function canPlaceShip(board, shipSize, coords, orientation) {
+export function canPlaceShip(board, shipSize, coords, isHorizontal) {
   // orientation determines direction to move from start coord
-  let dir = getOrientation(orientation);
+  let dir = getOrientation(isHorizontal);
   try {
     for (let i = 1; i <= shipSize; i++) {
       let pos = getPosition(coords, dir, i);
       if (board[pos.y][pos.x])
         throw new Error(
-          `Cannot place a ${orientation ? 'horizontal' : 'vertical'} ${shipSize} square ship at ${
+          `Cannot place a ${isHorizontal ? 'horizontal' : 'vertical'} ${shipSize} square ship at ${
             coords.x
           }, ${coords.y}, as ${pos.y}, ${pos.x} is an occupied space.`
         );
@@ -61,16 +65,17 @@ export function canPlaceShip(board, shipSize, coords, orientation) {
 
 // place a ship on a board
 // will throw if the position is occupied or out of bounds
-export function placeShip(board, shipSize, coords, orientation = 1) {
-  // orientation determines direction to move from start coord
-  if (canPlaceShip(board, shipSize, coords, orientation)) {
-    let dir = getOrientation(orientation);
+export function placeShip(board, shipSize, coords, isHorizontal) {
+  // orientation determines direction to move from start coor
+  if (canPlaceShip(board, shipSize, coords, isHorizontal)) {
+    let dir = getOrientation(isHorizontal);
     for (let i = 1; i <= shipSize; i++) {
       let pos = getPosition(coords, dir, i);
       board[pos.y][pos.x] = 1;
     }
+    return board;
   }
-  return board;
+  return false;
 }
 
 export default {
